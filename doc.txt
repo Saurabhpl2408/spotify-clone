@@ -1,0 +1,2 @@
+user: admin
+password: Wx2vIJGlm9aQQa1S
