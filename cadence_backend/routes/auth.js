@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require('./../models/user')
+const User = require('./../models/user');
+const getToken = require('./../utils/helpers');
 router.post("/register", async (req,res)=>{
     const{email, password, firstName, lastName, username} = req.body;
     const user= await User.findOne({email:email});
@@ -19,4 +20,7 @@ router.post("/register", async (req,res)=>{
     const newUser =await User.create(newUserData);
 
     const token = getToken(email, newUser);
+    const userToReturn = {...newUser.toJSON(), token};
+    delete userToReturn.password;
+    return res.status(200).json(userToReturn);
 })
