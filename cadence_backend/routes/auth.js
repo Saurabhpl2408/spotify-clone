@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('./../models/user');
-const getToken = require('./../utils/helpers');
+const {getToken} = require('./../utils/helpers');
 const bcrypt = require('bcrypt');
 router.post("/register", async (req,res)=>{
     const{email, password, firstName, lastName, username} = req.body;
@@ -19,6 +19,7 @@ router.post("/register", async (req,res)=>{
         lastName, 
         username};
     const newUser =await User.create(newUserData);
+    console.log('New user:', newUserData);
 
     const token = getToken(email, newUser);
     const userToReturn = {...newUser.toJSON(), token};

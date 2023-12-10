@@ -44,7 +44,7 @@ app.get('/', (req,res)=>{
     res.send("HW!!!!");
 });
 
-app.use('/auth/register', authRoutes);
+app.use('/auth', authRoutes);
 
 app.listen(port, () => {
     console.log("Listening on " + port);
