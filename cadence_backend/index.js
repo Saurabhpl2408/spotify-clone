@@ -3,10 +3,12 @@ const mongoose = require('mongoose');
 var JwtStrategy = require('passport-jwt').Strategy,
 ExtractJwt = require('passport-jwt').ExtractJwt;
 const passport =require("passport");
-const User = require("./models/user")
+const User = require("./models/user");
+const authRoutes = require("./routes/auth");
 require('dotenv').config();
 const app =express();
-const port = 8000;
+const port = 8080;
+app.use(express.json());
 
 mongoose.connect("mongodb+srv://admin:Wx2vIJGlm9aQQa1S@cluster0.w2flgrw.mongodb.net/?retryWrites=true&w=majority",
     {
@@ -33,19 +35,16 @@ passport.use(new JwtStrategy(opts, function(jwt_payload, done) {
             return done(null, user);
         } else {
             return done(null, false);
-            // or you could create a new account
         }
     });
 }));
 
-// const connectDB = async ()=>{
-//     try{
-//         const conn = await mongoose.connect()
-//     }
-// }
+
 app.get('/', (req,res)=>{
     res.send("HW!!!!");
 });
+
+app.use('/auth/register', authRoutes);
 
 app.listen(port, () => {
     console.log("Listening on " + port);
