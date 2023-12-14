@@ -44,7 +44,9 @@ app.get('/', (req,res)=>{
     res.send("HW!!!!");
 });
 
+app.use(passport.initialize());
 app.use('/auth', authRoutes);
+// app.use('/song', songRoutes);
 
 app.listen(port, () => {
     console.log("Listening on " + port);
