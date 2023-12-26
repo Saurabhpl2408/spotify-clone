@@ -4,6 +4,7 @@ const User = require('./../models/user');
 const {getToken} = require('./../utils/helpers');
 const bcrypt = require('bcrypt');
 const passport = require("passport");
+
 router.post("/register",  async (req,res)=>{
     const{email, password, firstName, lastName, username} = req.body;
     const user= await User.findOne({email:email});
@@ -12,17 +13,17 @@ router.post("/register",  async (req,res)=>{
         status('403')
         .json({error:"The user already exists."})
     }
-    const hashPassword = await bcrypt.hash(password,10);
-    const newUserData = {
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hashSync(password, salt);
+        const newUserData = {
         email, 
         password:hashPassword, 
         firstName, 
         lastName, 
         username};
     const newUser =await User.create(newUserData);
-    console.log('New user:', newUserData);
 
-    const token = getToken(email, newUser);
+    const token = await getToken(email, newUser);
     const userToReturn = {...newUser.toJSON(), token};
     delete userToReturn.password;
     return res.status(200).json(userToReturn);
